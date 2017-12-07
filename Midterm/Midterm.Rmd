@@ -1,0 +1,53 @@
+---
+title: "Midterm"
+author: "Minzhe Zhang mxz163730"
+date: "2017/11/3"
+output: html_document
+---
+
+### Question 1
+The computed principal components are listed below.
+```{r}
+suppressMessages(library(nFactors))
+### read and normalize data
+air.data <- read.csv("data.csv")
+air.data <- apply(air.data, 2, scale)
+### pca
+air.pca <- prcomp(air.data)
+print(air.pca)
+print(summary(air.pca))
+```
+
+### Question 2
+From the Bartlett, Anderson and Lawley Procedures, 6 out of 7 components are significant.
+```{r}
+### Determine the significant PCA
+pca.test <- nBartlett((air.pca$sdev)^2, N = dim(air.data)[1], alpha = 0.05, details = TRUE)
+summary(pca.test)
+```
+
+### Question 3
+The sample covariance matrix is the following
+```{r}
+new.data <- air.data[,c(1,2,5,6)]
+cor.mat <- cor(new.data)
+cor.mat
+```
+#### (a) Principal component with 1 and 2 factors
+```{r}
+print(principal(new.data, nfactors = 1))
+print(principal(new.data, nfactors = 2))
+```
+
+#### (b) Varimax rotation of both m = 1 and m = 2 solutions. 
+Solar radiation and O3 contribute mostly to the only factor when m = 1. When m = 2, Solar radiation and O3 are still the main components of factor 1; wind and O3 are the main component of factor 2.
+```{r}
+FA1 <- fa(new.data, nfactors = 1, rotate = "varimax")
+FA2 <- fa(new.data, nfactors = 2, rotate = "varimax")
+print(FA1)
+print(FA2)
+```
+
+#### (c) Discussion
+1. Two factor is enough to explain almost all the varibility in the data. 
+2. The result of prinicpal component analysis anf factor analysis is close but not exactly same, indicating there is similarity and distinction in these two type of methods.
