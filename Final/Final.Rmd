@@ -1,0 +1,31 @@
+---
+title: "Final"
+author: "Minzhe Zhang"
+date: "2017/12/10"
+output: html_document
+---
+
+### Question 1
+From the result below, we see that LD1 and LD2 achieve a good separation of the response variable. In LD1 and LD2, variable **Mexico**, **Jalisco**, **Nuevo**, **Tamaulipas** and **Nayarit** are important ones to explain dynamics of chikungunaya.
+```{r}
+### read data
+library(MASS)
+gdt.data <- read.csv("FinalExam_GDT_Chikungunya2017.csv")
+# gdt.data[,-c(1,2)] <- apply(gdt.data[,-c(1,2)], 2, scale)
+gdt.lda <- lda(gdt.data$TotalCumulativeChikungunayaCases ~ gdt.data$Mexico + gdt.data$BajaCalifornia + gdt.data$DistritoFederal + gdt.data$Jalisco + gdt.data$Estado + gdt.data$Morelos + gdt.data$Nuevo + gdt.data$Oaxaca + gdt.data$Quintana.Roo + gdt.data$Sonora + gdt.data$Tamaulipas + gdt.data$Veracruz + gdt.data$Yucatan + gdt.data$Chiapas + gdt.data$Colima + gdt.data$Nayarit + gdt.data$Sinaloa + gdt.data$Tabasco)
+gdt.lda
+```
+
+### Question 2
+From the hierarchical clustering plot below, using 0.5 as cut off, the following variables could be clustered together.
+
+- **BajaCalifornia** and **Sonora**.
+- **Jalisco**, **Tabasco**, **Nuevo** and **Nayarit**.
+- **Yucatan**, **Tamaulipas** and **Veracruz**.
+- **DistritoFederal** and **Chiapas**.
+- **Quintana Roo** and **Colima**.
+```{r}
+clust <- hclust(dist(t(gdt.data[,-c(1,2)])))
+plot(clust)
+abline(h = 0.5, col = "red")
+```
